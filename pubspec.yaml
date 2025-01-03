@@ -54,6 +54,7 @@ dependencies:
   chewie:
   flutter_blurhash:
   visibility_detector:
+  simple_animations:
 
 dev_dependencies:
   flutter_test:

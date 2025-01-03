@@ -27,6 +27,14 @@ class ProjectsSection extends StatelessWidget {
         ],
         'demoLink':
             'https://drive.google.com/file/d/1-z7mrGdwcO8r-ctzX1iGE6LXU8CrMAwb/view?usp=drive_link',
+        'technologies': [
+          'Flutter',
+          'Firebase',
+          'Riverpod',
+          'Cloud Functions',
+          "Notifications",
+          'Google Map'
+        ],
       },
       {
         'title': 'Hotel Booking App',
@@ -44,6 +52,7 @@ class ProjectsSection extends StatelessWidget {
         ],
         'demoLink':
             'https://drive.google.com/file/d/1GvcDrlHW-kbQM0BVo705waoTef0b1nv1/view?usp=drive_link',
+        'technologies': ['Flutter', 'Firebase', 'Provider', 'Google Map'],
       },
       {
         'title': 'E-Learning App',
@@ -60,23 +69,32 @@ class ProjectsSection extends StatelessWidget {
           'assets/images/learner_4.jpg',
         ],
         'demoLink': '',
+        'technologies': ['Flutter', 'Firebase', 'Cloud Firestore'],
       },
     ];
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 20),
-      color: Theme.of(context).colorScheme.surface,
+      padding: EdgeInsets.symmetric(vertical: 80, horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Projects',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
           ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
-          const SizedBox(height: 40),
-          ...projects.map((project) => _ProjectCard(project: project)).toList(),
+          SizedBox(height: 40),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: projects.length,
+            itemBuilder: (context, index) => _ProjectCard(
+              project: projects[index],
+              index: index,
+            ),
+          ),
         ],
       ),
     );
@@ -85,116 +103,193 @@ class ProjectsSection extends StatelessWidget {
 
 class _ProjectCard extends StatelessWidget {
   final Map<String, dynamic> project;
+  final int index;
 
-  const _ProjectCard({Key? key, required this.project}) : super(key: key);
+  const _ProjectCard({Key? key, required this.project, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 40),
+      margin: EdgeInsets.only(bottom: 40),
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              project['title'],
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+            colors: [
+              Colors.blue.withOpacity(0.7),
+              Colors.purple.withOpacity(0.7)
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          project['title'],
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        )
+                            .animate()
+                            .fadeIn(duration: 400.ms)
+                            .slideX(begin: -0.2, end: 0),
+                        SizedBox(height: 8),
+                        Text(
+                          'Duration: ${project['duration']}',
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: Colors.white70,
+                                  ),
+                        ).animate().fadeIn(delay: 200.ms, duration: 400.ms),
+                      ],
+                    ),
                   ),
-            ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.2, end: 0),
-            Text(
-              'Duration: ${project['duration']}',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withOpacity(0.7),
-                  ),
-            ).animate().fadeIn(delay: 200.ms, duration: 400.ms),
-            const SizedBox(height: 20),
-            CarouselSlider(
-              options: CarouselOptions(
-                height: 300.0,
-                enlargeCenterPage: true,
-                autoPlay: true,
-                aspectRatio: 16 / 9,
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enableInfiniteScroll: true,
-                autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                viewportFraction: 0.8,
+                  _TechStack(technologies: project['technologies']),
+                ],
               ),
-              items: (project['images'] as List<String>).map((item) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        image: DecorationImage(
-                          image: NetworkImage(item),
-                          fit: BoxFit.contain,
+              SizedBox(height: 20),
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 300,
+                  autoPlay: true,
+                  aspectRatio: 16 / 9,
+                  autoPlayInterval: Duration(seconds: 3),
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enableInfiniteScroll: true,
+                ),
+                items: (project['images'] as List<String>).map((item) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 300, // Adjusted height
+                        // width: 200, // Adjusted width
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(item),
+                            fit: BoxFit.contain,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                      ),
+                      );
+                    },
+                  );
+                }).toList(),
+              ).animate().scale(
+                  delay: 400.ms, duration: 600.ms, curve: Curves.easeOutBack),
+              SizedBox(height: 20),
+              ...(project['description'] as List<String>).map((item) => Padding(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.check_circle, color: Colors.white, size: 18),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            item,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     )
                         .animate()
-                        .scale(duration: 400.ms, curve: Curves.easeOutBack);
-                  },
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 20),
-            ...(project['description'] as List<String>).map((item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('• ',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary)),
-                      Expanded(
-                        child: Text(
-                          item,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface),
-                        ),
-                      ),
-                    ],
-                  )
-                      .animate()
-                      .fadeIn(delay: 400.ms, duration: 400.ms)
-                      .slideX(begin: 0.2, end: 0),
-                )),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () async {
-                final url = project['demoLink'] as String;
-                if (await canLaunch(url)) {
-                  await launch(url);
-                }
-              },
-              icon: const Icon(
-                Icons.play_circle_outline,
-                color: Colors.white,
-              ),
-              label: const Text('Watch Demo'),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                        .fadeIn(delay: 600.ms, duration: 400.ms)
+                        .slideX(begin: 0.2, end: 0),
+                  )),
+              SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  final url = project['demoLink'] as String;
+                  if (await canLaunch(url)) {
+                    await launch(url);
+                  }
+                },
+                icon: Icon(Icons.play_circle_outline, color: Colors.white),
+                label: Text('Watch Demo'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-              ),
-            ).animate().scale(delay: 600.ms, duration: 400.ms),
-          ],
+              ).animate().scale(delay: 800.ms, duration: 400.ms),
+            ],
+          ),
         ),
       ),
     ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0);
+  }
+}
+
+class _TechStack extends StatelessWidget {
+  final List<String> technologies;
+
+  const _TechStack({Key? key, required this.technologies}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        alignment: WrapAlignment.start,
+        children: technologies.map((tech) {
+          return _TechChip(label: tech);
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _TechChip extends StatelessWidget {
+  final String label;
+
+  const _TechChip({Key? key, required this.label}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double maxWidth = MediaQuery.of(context).size.width *
+            0.4; // Limit width to 40% of the screen
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: maxWidth), // Dynamic maxWidth
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Text(
+              label,
+              style: TextStyle(color: Colors.white, fontSize: 12),
+              overflow: TextOverflow.ellipsis, // Handle long text
+              maxLines: 1, // Limit text to a single line
+            ),
+          ),
+        );
+      },
+    );
   }
 }

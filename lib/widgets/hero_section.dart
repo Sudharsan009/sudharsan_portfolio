@@ -22,16 +22,6 @@ class HeroSection extends StatelessWidget {
   Widget _buildDesktopHero(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Theme.of(context).colorScheme.primary,
-            Theme.of(context).colorScheme.secondary,
-          ],
-        ),
-      ),
       child: Row(
         children: [
           Expanded(
@@ -115,7 +105,7 @@ class HeroSection extends StatelessWidget {
                 width: 300,
                 height: 300,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                  shape: BoxShape.rectangle,
                   image: DecorationImage(
                     image: AssetImage('assets/images/profile_picture.jpg'),
                     fit: BoxFit.contain,
@@ -132,24 +122,22 @@ class HeroSection extends StatelessWidget {
   Widget _buildMobileHero(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Theme.of(context).colorScheme.primary,
-            Theme.of(context).colorScheme.secondary,
-          ],
-        ),
-      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-            radius: 80,
-            backgroundImage:
-                const AssetImage('assets/images/profile_picture.jpg'),
-          ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack),
+          Center(
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                image: DecorationImage(
+                  image: AssetImage('assets/images/profile_picture.jpg'),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack),
+          ),
           const SizedBox(height: 30),
           Text(
             'Welcome to my portfolio',
@@ -188,14 +176,6 @@ class HeroSection extends StatelessWidget {
                     ?.copyWith(color: Colors.white70),
                 speed: const Duration(milliseconds: 100),
               ),
-              TypewriterAnimatedText(
-                'UI/UX Designer',
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(color: Colors.white70),
-                speed: const Duration(milliseconds: 100),
-              ),
             ],
             totalRepeatCount: 3,
             pause: const Duration(milliseconds: 1000),
@@ -205,12 +185,13 @@ class HeroSection extends StatelessWidget {
           const SizedBox(height: 30),
           ElevatedButton(
             onPressed: () async {
-              const url = 'https://example.com/Sudharsan_S_Resume.pdf';
+              const url =
+                  'https://drive.google.com/file/d/18DGRRmAYwsjGsoX0Mr7RUy5s1Zp5ml1o/view?usp=drive_link';
               if (await canLaunch(url)) {
                 await launch(url);
               }
             },
-            child: const Text('Download Resume'),
+            child: const Text('View Resume'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.primary,
               backgroundColor: Colors.white,

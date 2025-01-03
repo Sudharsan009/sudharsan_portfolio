@@ -20,7 +20,7 @@ class Header extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.95),
+      color: Colors.transparent,
       child: SafeArea(
         child: Row(
           children: [

@@ -10,14 +10,14 @@ class ContactSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 20),
-      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Contact Me',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
           ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
           const SizedBox(height: 40),
@@ -40,40 +40,11 @@ class ContactSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _ContactItem(
-                icon: FontAwesomeIcons.envelope,
-                title: 'Email',
-                content: 'sudhanyogi9629@gmail.com',
-                onTap: () => _launchURL('mailto:sudhanyogi9629@gmail.com'),
-              ),
-              const SizedBox(height: 20),
-              _ContactItem(
-                icon: FontAwesomeIcons.phone,
-                title: 'Phone',
-                content: '(+91) 9629548007',
-                onTap: () => _launchURL('tel:+919629548007'),
-              ),
-              const SizedBox(height: 20),
-              _ContactItem(
-                icon: FontAwesomeIcons.mapMarkerAlt,
-                title: 'Location',
-                content: 'Ariyalur, INDIA',
-              ),
-            ],
-          )
-              .animate()
-              .fadeIn(delay: 200.ms, duration: 600.ms)
-              .slideX(begin: -0.2, end: 0),
+          child: _buildContactInfo(context),
         ),
         const SizedBox(width: 40),
         Expanded(
-          child: _ContactForm()
-              .animate()
-              .fadeIn(delay: 400.ms, duration: 600.ms)
-              .slideX(begin: 0.2, end: 0),
+          child: _ContactForm(),
         ),
       ],
     );
@@ -82,40 +53,41 @@ class ContactSection extends StatelessWidget {
   Widget _buildMobileLayout(BuildContext context) {
     return Column(
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _ContactItem(
-              icon: FontAwesomeIcons.envelope,
-              title: 'Email',
-              content: 'sudhanyogi9629@gmail.com',
-              onTap: () => _launchURL('mailto:sudhanyogi9629@gmail.com'),
-            ),
-            const SizedBox(height: 20),
-            _ContactItem(
-              icon: FontAwesomeIcons.phone,
-              title: 'Phone',
-              content: '(+91) 9629548007',
-              onTap: () => _launchURL('tel:+919629548007'),
-            ),
-            const SizedBox(height: 20),
-            _ContactItem(
-              icon: FontAwesomeIcons.mapMarkerAlt,
-              title: 'Location',
-              content: 'Ariyalur, INDIA',
-            ),
-          ],
-        )
-            .animate()
-            .fadeIn(delay: 200.ms, duration: 600.ms)
-            .slideY(begin: 0.2, end: 0),
+        _buildContactInfo(context),
         const SizedBox(height: 40),
-        _ContactForm()
-            .animate()
-            .fadeIn(delay: 400.ms, duration: 600.ms)
-            .slideY(begin: 0.2, end: 0),
+        _ContactForm(),
       ],
     );
+  }
+
+  Widget _buildContactInfo(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _ContactItem(
+          icon: FontAwesomeIcons.envelope,
+          title: 'Email',
+          content: 'sudhanyogi9629@gmail.com',
+          onTap: () => _launchURL('mailto:sudhanyogi9629@gmail.com'),
+        ),
+        const SizedBox(height: 20),
+        _ContactItem(
+          icon: FontAwesomeIcons.phone,
+          title: 'Phone',
+          content: '(+91) 9629548007',
+          onTap: () => _launchURL('tel:+919629548007'),
+        ),
+        const SizedBox(height: 20),
+        _ContactItem(
+          icon: FontAwesomeIcons.mapMarkerAlt,
+          title: 'Location',
+          content: 'Ariyalur, INDIA',
+        ),
+      ],
+    )
+        .animate()
+        .fadeIn(delay: 200.ms, duration: 600.ms)
+        .slideX(begin: -0.2, end: 0);
   }
 
   void _launchURL(String url) async {
@@ -147,22 +119,31 @@ class _ContactItem extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          FaIcon(icon, size: 24, color: Theme.of(context).colorScheme.primary),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: FaIcon(icon, size: 24, color: Colors.white),
+          ),
           const SizedBox(width: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      )),
-              Text(content,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.7),
-                      )),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              Text(
+                content,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.white.withOpacity(0.7),
+                    ),
+              ),
             ],
           ),
         ],
@@ -195,28 +176,33 @@ class _ContactFormState extends State<_ContactForm> {
             controller: _nameController,
             decoration: InputDecoration(
               labelText: 'Name',
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               filled: true,
               fillColor: Theme.of(context).colorScheme.surface,
             ),
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your name';
               }
               return null;
             },
-          ),
+          )
+              .animate()
+              .fadeIn(delay: 200.ms, duration: 600.ms)
+              .slideX(begin: 0.2, end: 0),
           const SizedBox(height: 16),
           TextFormField(
             controller: _emailController,
             decoration: InputDecoration(
               labelText: 'Email',
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               filled: true,
               fillColor: Theme.of(context).colorScheme.surface,
             ),
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your email';
@@ -227,17 +213,21 @@ class _ContactFormState extends State<_ContactForm> {
               }
               return null;
             },
-          ),
+          )
+              .animate()
+              .fadeIn(delay: 400.ms, duration: 600.ms)
+              .slideX(begin: 0.2, end: 0),
           const SizedBox(height: 16),
           TextFormField(
             controller: _messageController,
             decoration: InputDecoration(
               labelText: 'Message',
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               filled: true,
               fillColor: Theme.of(context).colorScheme.surface,
             ),
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             maxLines: 5,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -245,32 +235,68 @@ class _ContactFormState extends State<_ContactForm> {
               }
               return null;
             },
-          ),
+          )
+              .animate()
+              .fadeIn(delay: 600.ms, duration: 600.ms)
+              .slideX(begin: 0.2, end: 0),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: _submitForm,
-            child: const Text('Send Message'),
+            child: const Text(
+              'Send Message',
+              style: TextStyle(color: Colors.white),
+            ),
             style: ElevatedButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               backgroundColor: Theme.of(context).colorScheme.primary,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-          ),
+          ).animate().scale(delay: 800.ms, duration: 400.ms),
         ],
       ),
     );
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // TODO: Implement form submission logic
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Message sent successfully!')),
+      final Uri emailLaunchUri = Uri(
+        scheme: 'mailto',
+        path: 'sudhanyogi9629@gmail.com',
+        query: encodeQueryParameters(<String, String>{
+          'subject': 'New message from ${_nameController.text}',
+          'body':
+              'Name: ${_nameController.text}\nEmail: ${_emailController.text}\n\nMessage:\n${_messageController.text}'
+        }),
       );
-      _nameController.clear();
-      _emailController.clear();
-      _messageController.clear();
+
+      if (await canLaunch(emailLaunchUri.toString())) {
+        await launch(emailLaunchUri.toString());
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(
+        //       content: Text(
+        //           'Email client opened. Please send the email to complete the process.')),
+        // );
+        _nameController.clear();
+        _emailController.clear();
+        _messageController.clear();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text(
+                  'Could not launch email client. Please try again later.')),
+        );
+      }
     }
+  }
+
+  String? encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
   }
 
   @override
